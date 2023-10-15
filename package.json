@@ -1,0 +1,17 @@
+{
+  "name": "twitchbot",
+  "version": "1.0.0",
+  "description": "Twitch bot to fuck over garou",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "quiffy",
+  "license": "MIT",
+  "dependencies": {
+    "better-npm-run": "^0.1.1",
+    "dotenv": "^16.3.1",
+    "tmi.js": "^1.8.5",
+    "xhr2": "^0.2.1"
+  }
+}
