@@ -1,7 +1,7 @@
 var XMLHttpRequest = require('xhr2');
 
 class TwitchAuth {
-    constructor(clientId, clientSecret, redirectUri) {
+    constructor(clientId, clientSecret, redirectUri = "") {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
@@ -23,6 +23,8 @@ class TwitchAuth {
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         xhr.send(data);
+
+        return data.access_token;
     }
 }
 
