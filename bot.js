@@ -18,17 +18,19 @@ client.connect();
 function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
 
-    if(context.username.toLower() === "quifenadine") {
-        console.log(`Checking Pyramid: ${msg}`)
+    if(context.username.toLowerCase() === "quifenadine") {
         if(checkPyramid(msg)){
-            client.say(target, "tssk");
+            client.say(target, "Tssk");
         }
     }
 }
 
 function checkPyramid(msg) {
     const allEqual = arr => arr.every(val => val === arr[0]);
-    const seperatedPyramid = msg.split(' ');
+    let seperatedPyramid = msg.split(' ');
+    seperatedPyramid = seperatedPyramid.filter(function(entry) { return /\S/.test(entry); }); // just for safety
+
+    
     console.log(seperatedPyramid)
     if(seperatedPyramid.length >= 5 && allEqual(seperatedPyramid)) {
         return "Tssk"
