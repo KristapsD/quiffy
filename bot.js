@@ -1,59 +1,43 @@
-const tmi = require('tmi.js');
-const TwitchAuth = require('./Code/TwitchAuth.js'); 
+const botLogic = require('./Code/botLogic.js');
 const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
-console.log(EnvVars);
 
-const Auth = new TwitchAuth(EnvVars.client_id, EnvVars.client_secret, EnvVars.redirect_uri);
+const bot = new botLogic(EnvVars, ['quifenadine']);
 
-Auth.authorize();
+const client = bot.start();
 
-// Define configuration options
-// const opts = {
-//   identity: {
-//     username: EnvVars.client_id,
-//     password: EnvVars.client_secret
-//   },
-//   channels: [
-//     'quifenadine'
-//   ]
-// };
+// Register our event handlers (defined below)
+client.on('message', onMessageHandler);
+client.on('connected', onConnectedHandler);
 
-// // Create a client with our options
-// const client = new tmi.client(opts);
+// Connect to Twitch:
+client.connect();
 
-// // Register our event handlers (defined below)
-// client.on('message', onMessageHandler);
-// client.on('connected', onConnectedHandler);
+// Called every time a message comes in
+function onMessageHandler (target, context, msg, self) {
+    if (self) { return; } // Ignore messages from the bot
 
-// // Connect to Twitch:
-// client.connect();
+    if(context.username.toLower() === "quifenadine") {
+        console.log(`Checking Pyramid: ${msg}`)
+        if(checkPyramid(msg)){
+            client.say(target, "tssk");
+        }
+    }
+}
 
-// // Called every time a message comes in
-// function onMessageHandler (target, context, msg, self) {
-//   if (self) { return; } // Ignore messages from the bot
+function checkPyramid(msg) {
+    const allEqual = arr => arr.every(val => val === arr[0]);
+    const seperatedPyramid = msg.split(' ');
+    console.log(seperatedPyramid)
+    if(seperatedPyramid.length >= 5 && allEqual(seperatedPyramid)) {
+        return "Tssk"
+    } else {
+        return null
+    }
+}
 
-//   // Remove whitespace from chat message
-//   const commandName = msg.trim();
-
-//   // If the command is known, let's execute it
-//   if (commandName === '!dice') {
-//     const num = rollDice();
-//     client.say(target, `You rolled a ${num}`);
-//     console.log(`* Executed ${commandName} command`);
-//   } else {
-//     console.log(`* Unknown command ${commandName}`);
-//   }
-// }
-
-// // Function called when the "dice" command is issued
-// function rollDice () {
-//   const sides = 6;
-//   return Math.floor(Math.random() * sides) + 1;
-// }
-
-// // Called every time the bot connects to Twitch chat
-// function onConnectedHandler (addr, port) {
-//   console.log(`* Connected to ${addr}:${port}`);
-// }
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler (addr, port) {
+    console.log(`* Connected to ${addr}:${port}`);
+}
