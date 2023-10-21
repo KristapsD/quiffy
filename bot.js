@@ -3,7 +3,7 @@ const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
 
-const bot = new botLogic(EnvVars, ['quifenadine']);
+const bot = new botLogic(EnvVars, ['elajjaz', 'quifenadine']);
 
 const client = bot.start();
 
@@ -18,7 +18,10 @@ client.connect();
 async function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
 
-    if(context.username.toLowerCase() === "quifenadine") {
+    console.log(context['user-id']);
+
+    //me or awakenedgarou
+    if(context['user-id'].toLowerCase() === '135624254' || context['user-id'].toLowerCase() === '63633617') {
         if(await checkPyramid(msg)){
             client.say(target, "Tssk").catch((err)=> {console.log(err)});
         }
@@ -29,11 +32,7 @@ function checkPyramid(msg) {
     const allEqual = arr => arr.every(val => val === arr[0]);
 
     let seperatedPyramid = msg.split(' ');
-    console.log(seperatedPyramid)
     seperatedPyramid = seperatedPyramid.filter((str) => { return /^\w+$/g.test(str); }); // just for safety
-    console.log(seperatedPyramid)
-    console.log(seperatedPyramid.length)
-    console.log(allEqual(seperatedPyramid))
     if(seperatedPyramid.length >= 5 && allEqual(seperatedPyramid)) {
         return true
     } else {
