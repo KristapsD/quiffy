@@ -1,7 +1,6 @@
 const botLogic = require('./Code/botLogic.js');
 const TwitchApi = require('./Code/TwitchApi.js');
-const data = require('./Code/Store/Responses.json');
-
+const responsesArray = require('./Code/Store/Responses.json');
 const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
@@ -25,9 +24,8 @@ async function onMessageHandler (target, context, msg, self) {
     //me or awakenedgarou
     if(context['user-id'].toLowerCase() === '135624254' || context['user-id'].toLowerCase() === '63633617') {
         if(await checkPyramid(msg)){
-            const responses = data;
 
-            client.say(target, responses[getRandomInt(20)]).catch((err)=> {console.log(err)});
+            client.say(target, responsesArray[getRandomInt(20)]).catch((err)=> {console.log(err)});
         }
     }
 }
