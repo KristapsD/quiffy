@@ -1,5 +1,7 @@
 const botLogic = require('./Code/botLogic.js');
 const TwitchApi = require('./Code/TwitchApi.js');
+const data = require('./Code/Store/Responses.json');
+
 const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
@@ -23,9 +25,16 @@ async function onMessageHandler (target, context, msg, self) {
     //me or awakenedgarou
     if(context['user-id'].toLowerCase() === '135624254' || context['user-id'].toLowerCase() === '63633617') {
         if(await checkPyramid(msg)){
-            client.say(target, "Tssk").catch((err)=> {console.log(err)});
+            const responses = data;
+
+            client.say(target, responses[getRandomInt(20)]).catch((err)=> {console.log(err)});
         }
     }
+}
+
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler (addr, port) {
+    console.log(`* Connected to ${addr}:${port}`);
 }
 
 function checkPyramid(msg) {
@@ -40,15 +49,14 @@ function checkPyramid(msg) {
     }
 }
 
-// Called every time the bot connects to Twitch chat
-function onConnectedHandler (addr, port) {
-    console.log(`* Connected to ${addr}:${port}`);
-}
-
 async function isStreamLive(target) {
     const ta = new TwitchApi(EnvVars.client_id, EnvVars.client_secret);
-    //await ta.authorize();
+    await ta.authorize();
     let streamInfo = await ta.getStream(target)
     await ta.dispose();
     return streamInfo.length != 0;
 }
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
