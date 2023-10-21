@@ -1,12 +1,18 @@
-class TwitchAuth {
+class TwitchApi {
     constructor(clientId, clientSecret, redirectUri = "") {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
         this.access_token = undefined;
+
+        this.initialize();
     }
 
     async initialize() {
+        await this.authorize();
+    }
+
+    async authorize() {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         
@@ -42,7 +48,7 @@ class TwitchAuth {
         redirect: 'follow'
         };
 
-        return await fetch(`https://api.twitch.tv/helix/streams?user_login=${streamLogin}&type=all`, requestOptions)
+        return await fetch(`https://api.twitch.tv/helix/streams?user_login=${streamLogin}`, requestOptions)
         .then(response => response.json())
         .then((result) => {
             return result.data;
@@ -74,4 +80,4 @@ class TwitchAuth {
     }
 }
 
-module.exports = TwitchAuth
+module.exports = TwitchApi
