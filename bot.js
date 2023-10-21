@@ -1,5 +1,5 @@
 const botLogic = require('./Code/botLogic.js');
-const twitchAuth = require('./Code/TwitchAuth.js');
+const TwitchApi = require('./Code/TwitchApi.js');
 const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
@@ -17,7 +17,7 @@ client.connect();
 // Called every time a message comes in
 async function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
-    if (!checkIfLive(target.replace('#', ''))) { return; }; //ignore if channel is live
+    if (!isStreamLive(target.replace('#', ''))) { return; }; //ignore if channel is live
 
     console.log(context['user-id']);
     //me or awakenedgarou
@@ -45,10 +45,10 @@ function onConnectedHandler (addr, port) {
     console.log(`* Connected to ${addr}:${port}`);
 }
 
-async function checkIfLive(target) {
-    const ta = new twitchAuth(EnvVars.client_id, EnvVars.client_secret);
-    await ta.initialize();
-    let data = await ta.getStream(target)
+async function isStreamLive(target) {
+    const ta = new TwitchApi(EnvVars.client_id, EnvVars.client_secret);
+    //await ta.authorize();
+    let streamInfo = await ta.getStream(target)
     await ta.dispose();
-    return data.length != 0;
+    return streamInfo.length != 0;
 }
