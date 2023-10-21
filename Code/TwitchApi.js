@@ -1,5 +1,5 @@
 class TwitchApi {
-    constructor(clientId, clientSecret, redirectUri = "") {
+    constructor(clientId, clientSecret, redirectUri = undefined) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
