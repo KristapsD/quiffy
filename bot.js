@@ -1,10 +1,10 @@
 const botLogic = require('./Code/botLogic.js');
+const twitchAuth = require('./Code/TwitchAuth.js');
 const EnvVars = {};
 
 require('dotenv').config({ path: "Environments/local.env", processEnv: EnvVars });
 
-const bot = new botLogic(EnvVars, ['elajjaz', 'quifenadine']);
-
+const bot = new botLogic(EnvVars, ['quifenadine']);
 const client = bot.start();
 
 // Register our event handlers (defined below)
@@ -17,9 +17,9 @@ client.connect();
 // Called every time a message comes in
 async function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
+    if (!checkIfLive(target.replace('#', ''))) { return; }; //ignore if channel is live
 
     console.log(context['user-id']);
-
     //me or awakenedgarou
     if(context['user-id'].toLowerCase() === '135624254' || context['user-id'].toLowerCase() === '63633617') {
         if(await checkPyramid(msg)){
@@ -43,4 +43,12 @@ function checkPyramid(msg) {
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port) {
     console.log(`* Connected to ${addr}:${port}`);
+}
+
+async function checkIfLive(target) {
+    const ta = new twitchAuth(EnvVars.client_id, EnvVars.client_secret);
+    await ta.initialize();
+    let data = await ta.getStream(target)
+    await ta.dispose();
+    return data.length != 0;
 }
