@@ -26,16 +26,20 @@ setInterval(async function() {
     //check if stream is live every 15 mins, if live disconnect, otherwise connect
     const streamLive = await isStreamLive('elajjaz');
 
-    console.log(new Date());
+    console.log(`Current time: ${new Date()}`);
     console.log(`Am i connected: ${connected}.`);
     console.log(`Is the stream live: ${streamLive}.`);
 
     if(streamLive && connected) {
         console.log("I think the stream is live, and i am connected, disconnecting.")
         client.disconnect();
+        connected = false;
     } else if (!streamLive && !connected) {
         console.log("I think the stream is not live, and i am not connected, connecting.")
         client.connect();
+        connected = true;
+    } else {
+        console.log("No actions needed.")
     }
 }, 15 * 60 * 1000);
 
