@@ -41,7 +41,7 @@ setInterval(async function() {
     } else {
         console.log("No actions needed.")
     }
-}, 15 * 60 * 1000);
+}, 30 * 60 * 1000);
 
 // Called every time a message comes in
 async function onMessageHandler (target, context, msg, self) {
@@ -72,7 +72,7 @@ async function onMessageHandler (target, context, msg, self) {
     console.log(context['user-id']);
     console.log(last5MessagesMaybePyramid)
 
-    if(last5MessageSenders.length === 5 && allEqual(last5MessageSenders) && last5MessageSenders[0] === "63633617"){
+    if(last5MessageSenders.length === 5 && allEqual(last5MessageSenders) && last5MessageSenders[0] === "135624254"){
         if(last5MessagesMaybePyramid["pyramid"]) {
             console.log(response)
             client.say(target, response).catch((err)=> {console.log(err)});
