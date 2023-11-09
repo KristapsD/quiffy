@@ -12,7 +12,7 @@ export default class botLogic {
         this.client;
     }
 
-    public start() {
+    public start(): Client {
         const opts: Options = {
             identity: {
                 username: this.envvars.usn,
