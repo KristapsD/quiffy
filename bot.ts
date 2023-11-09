@@ -1,6 +1,6 @@
 import botLogic from "./Code/botLogic.js";
 import TwitchApi from "./Code/TwitchApi.js";
-import responsesArray from "./Code/Store/Responses.json"
+import * as responsesArray from "./Code/Store/Responses.json";
 import * as dotenv from "dotenv";
 import { ChatUserstate } from "tmi.js";
 
@@ -28,7 +28,9 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-setInterval(async function() {
+
+
+setInterval(async function(): Promise<void> {
     //check if stream is live every 15 mins, if live disconnect, otherwise connect
     const streamLive = await isStreamLive('elajjaz');
 
@@ -48,6 +50,7 @@ setInterval(async function() {
         console.log("No actions needed.")
     }
 }, 30 * 60 * 1000);
+  
 
 // Called every time a message comes in
 async function onMessageHandler (target: string, context: ChatUserstate, msg: string, self: boolean): Promise<void> {
