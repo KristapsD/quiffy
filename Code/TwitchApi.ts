@@ -5,7 +5,7 @@ export default class TwitchApi {
   private access_token: string;
   private _header: Headers;
 
-    constructor(clientId, clientSecret, redirectUri = "") {
+    constructor(clientId: string, clientSecret: string, redirectUri: string = "") {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
@@ -44,7 +44,7 @@ export default class TwitchApi {
           .catch(error => console.log('error', error));
     }
 
-    public async getStream(streamLogin) {
+    public async getStream(streamLogin: string) {
         var requestOptions: RequestInit = {
           method: 'GET',
           headers: this._header,
