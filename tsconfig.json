@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "outDir": "build/local",
+        "removeComments": true,
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": ["ES2015", "DOM"],
+        "moduleResolution": ""
+    }, 
+    "include": [
+        "./Code/**/*",
+        "./bot.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "./Code/Store/Responses.json"
+    ]
+}
