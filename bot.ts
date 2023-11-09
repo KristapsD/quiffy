@@ -3,6 +3,7 @@ import TwitchApi from "./Code/TwitchApi.js";
 import * as responsesArray from "./Code/Store/Responses.json";
 import * as dotenv from "dotenv";
 import { ChatUserstate } from "tmi.js";
+import { streamInfo } from "./Code/types/twitchApitypes.js";
 
 interface isPyramid {
     pyramid: boolean,
@@ -109,7 +110,7 @@ function checkPyramid(msg: string): boolean {
 
 async function isStreamLive(target: string): Promise<boolean> {
     const ta = new TwitchApi(EnvVars.client_id, EnvVars.client_secret);
-    let streamInfo = await ta.getStream(target);
+    let streamInfo: streamInfo[] = await ta.getStream(target);
     await ta.dispose();
     return streamInfo.length != 0;
 }
