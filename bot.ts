@@ -4,11 +4,8 @@ import * as responsesArray from "./Code/Store/Responses.json";
 import * as dotenv from "dotenv";
 import { ChatUserstate } from "tmi.js";
 import { streamInfo } from "./Code/types/twitchApitypes.js";
+import { isPyramid } from "./Code/types/miscTypes.js";
 
-interface isPyramid {
-    pyramid: boolean,
-    count: number
-}
 const EnvVars: dotenv.DotenvPopulateInput = {};
 let connected: boolean = false;
 let last5MessageSenders: (string | undefined)[];
@@ -29,29 +26,7 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-
-
-setInterval(async function(): Promise<void> {
-    //check if stream is live every 15 mins, if live disconnect, otherwise connect
-    const streamLive = await isStreamLive('elajjaz');
-
-    console.log(`Current time: ${new Date()}`);
-    console.log(`Am i connected: ${connected}.`);
-    console.log(`Is the stream live: ${streamLive}.`);
-
-    if(streamLive && connected) {
-        console.log("I think the stream is live, and i am connected, disconnecting.")
-        client.disconnect();
-        connected = false;
-    } else if (!streamLive && !connected) {
-        console.log("I think the stream is not live, and i am not connected, connecting.")
-        client.connect();
-        connected = true;
-    } else {
-        console.log("No actions needed.")
-    }
-}, 30 * 60 * 1000);
-  
+//bot listeners
 
 // Called every time a message comes in
 async function onMessageHandler (target: string, context: ChatUserstate, msg: string, self: boolean): Promise<void> {
@@ -101,13 +76,6 @@ function onConnectedHandler (addr: string, port: number): void {
     connected = true;
 }
 
-function checkPyramid(msg: string): boolean {
-    let seperatedPyramid: string[] = msg.split(' ');
-    seperatedPyramid = seperatedPyramid.filter((str) => { return /^\w+$/g.test(str); }); // just for safety
-
-    return seperatedPyramid.length >= 5 && allEqual(seperatedPyramid)
-}
-
 async function isStreamLive(target: string): Promise<boolean> {
     const ta = new TwitchApi(EnvVars.client_id, EnvVars.client_secret);
     let streamInfo: streamInfo[] = await ta.getStream(target);
@@ -115,10 +83,42 @@ async function isStreamLive(target: string): Promise<boolean> {
     return streamInfo.length != 0;
 }
 
-function getRandomInt(max: number): number {
+// only callable
+
+const allEqual = (arr: (string | undefined)[]) => {
+    return arr.every(val => val === arr[0]);
+}
+
+const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
 }
 
-function allEqual(arr: (string | undefined)[]): boolean  {
-    return arr.every(val => val === arr[0]);
+const checkPyramid = (msg: string) => {
+    let seperatedPyramid: string[] = msg.split(' ');
+    seperatedPyramid = seperatedPyramid.filter((str) => { return /^\w+$/g.test(str); }); // just for safety
+
+    return seperatedPyramid.length >= 5 && allEqual(seperatedPyramid)
 }
+
+// check every 30 mins
+
+setInterval(async function(): Promise<void> {
+    //check if stream is live every 15 mins, if live disconnect, otherwise connect
+    const streamLive = await isStreamLive('elajjaz');
+
+    console.log(`Current time: ${new Date()}`);
+    console.log(`Am i connected: ${connected}.`);
+    console.log(`Is the stream live: ${streamLive}.`);
+
+    if(streamLive && connected) {
+        console.log("I think the stream is live, and i am connected, disconnecting.")
+        client.disconnect();
+        connected = false;
+    } else if (!streamLive && !connected) {
+        console.log("I think the stream is not live, and i am not connected, connecting.")
+        client.connect();
+        connected = true;
+    } else {
+        console.log("No actions needed.")
+    }
+}, 30 * 60 * 1000);
