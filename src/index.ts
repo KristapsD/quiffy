@@ -1,6 +1,6 @@
 import botLogic from "./Code/classes/botLogic.js";
 import TwitchApi from "./Code/classes/TwitchApi.js";
-import * as responsesArray from "./Code/Store/Responses.json";
+import { default as responsesArray } from "./Code/Store/Responses.json";
 import * as dotenv from "dotenv";
 import { ChatUserstate } from "tmi.js";
 import { streamInfo } from "./Code/types/twitchApitypes.js";
@@ -39,7 +39,6 @@ async function onMessageHandler (target: string, context: ChatUserstate, msg: st
         last5MessagesMaybePyramid.last5Senders.shift();
 
     if (self) { return; }
-
     const msgIsPotentialPyramid: boolean = await fiveConsecutive(msg);
 
     if(msgIsPotentialPyramid) {
@@ -59,6 +58,8 @@ async function onMessageHandler (target: string, context: ChatUserstate, msg: st
             last5MessagesMaybePyramid.pyramid = false;
         }
     }
+
+    console.log(last5MessagesMaybePyramid)
 }
 
 // Called every time the bot connects to Twitch chat
